@@ -1,0 +1,45 @@
+.Board {
+    display: flex;
+    flex-direction: row;
+    padding: 16px;
+}
+
+.Columns {
+    padding: 16px;
+    display: flex;
+}
+.Columns > * + * {
+    margin-left: 24px;
+}
+
+.Column {
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+    border-radius: 6px;
+    padding: 8px;
+    background: #45a2ff86;
+}
+.Column > * + * {
+    margin-top: 24px;
+}
+
+.Column__Cards > * + * {
+    margin-top: 8px;
+}
+
+.Column__Input {
+    border: none;
+    outline: none;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+    border-radius: 6px;
+    padding: 8px;
+}
+.Column__Input:focus {
+    box-shadow: 0 2px 3px rgba(255, 115, 0, 0.801), 0 0 0 1px rgba(255, 115, 0, 0.801);
+}
+
+.Card {
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+    border-radius: 6px;
+    padding: 4px 8px;
+    background: white;
+}
