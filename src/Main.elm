@@ -37,6 +37,7 @@ update msg model =
     case Debug.log "msg " msg of
         OnFieldChange idx str ->
             let
+                updateField : Column -> Column
                 updateField column =
                     if column.id == idx then
                         { column | field = str }
