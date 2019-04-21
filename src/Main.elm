@@ -5,6 +5,7 @@ import Browser.Events
 import Html exposing (..)
 import Html.Attributes as Attrs
 import Html.Events as Ev
+import Json.Decode as JD
 import Utils exposing (isJust)
 
 
@@ -14,7 +15,11 @@ type alias Model =
 
 
 type alias Column =
-    { id : Int, title : String, cards : List Card, field : String }
+    { id : Int
+    , title : String
+    , cards : List Card
+    , field : String
+    }
 
 
 type alias Card =
@@ -23,18 +28,18 @@ type alias Card =
 
 
 type Msg
-    = UpdateField Int String
+    = OnFieldChange Int String
     | AddCard Int
 
 
 update : Msg -> Model -> Model
 update msg model =
     case Debug.log "msg " msg of
-        UpdateField idx s ->
+        OnFieldChange idx str ->
             let
                 updateField column =
                     if column.id == idx then
-                        { column | field = s }
+                        { column | field = str }
 
                     else
                         column
@@ -75,7 +80,7 @@ viewColumn idx col =
         , Html.div [ Attrs.class "Column__Cards" ] <| List.map viewCard col.cards
         , Html.input
             [ Attrs.class "Column__Input"
-            , Ev.onInput (UpdateField idx)
+            , Ev.onInput (OnFieldChange idx)
             ]
             []
         , Html.button
