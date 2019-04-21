@@ -3,7 +3,8 @@ module Main exposing (Model, Msg(..), view)
 import Browser
 import Browser.Events
 import Html exposing (..)
-import Html.Attributes as Attrs exposing (..)
+import Html.Attributes as Attrs
+import Html.Events as Ev
 import Utils exposing (isJust)
 
 
@@ -13,7 +14,7 @@ type alias Model =
 
 
 type alias Column =
-    { title : String, cards : List Card }
+    { id : Int, title : String, cards : List Card, field : String }
 
 
 type alias Card =
@@ -22,14 +23,35 @@ type alias Card =
 
 
 type Msg
-    = NoOp
+    = UpdateField Int String
+    | AddCard Int
 
 
 update : Msg -> Model -> Model
 update msg model =
     case Debug.log "msg " msg of
-        NoOp ->
-            model
+        UpdateField idx s ->
+            let
+                updateField column =
+                    if column.id == idx then
+                        { column | field = s }
+
+                    else
+                        column
+            in
+            { model | columns = List.map updateField model.columns }
+
+        AddCard idx ->
+            let
+                addCard : Column -> Column
+                addCard column =
+                    if column.id == idx then
+                        { column | cards = Card column.field :: column.cards }
+
+                    else
+                        column
+            in
+            { model | columns = List.map addCard model.columns }
 
 
 view : Model -> Html Msg
@@ -46,28 +68,38 @@ viewCard card =
         ]
 
 
-viewColumn : Column -> Html Msg
-viewColumn col =
+viewColumn : Int -> Column -> Html Msg
+viewColumn idx col =
     Html.div [ Attrs.class "Column" ]
         [ Html.h2 [ Attrs.class "Column__Title" ] [ text col.title ]
         , Html.div [ Attrs.class "Column__Cards" ] <| List.map viewCard col.cards
-        , Html.input [ Attrs.class "Column__Input" ] []
+        , Html.input
+            [ Attrs.class "Column__Input"
+            , Ev.onInput (UpdateField idx)
+            ]
+            []
+        , Html.button
+            [ Attrs.class "Column_Submit"
+            , Attrs.disabled <| String.isEmpty <| col.field
+            , Ev.onClick <| AddCard idx
+            ]
+            [ Html.text "Add Card" ]
         ]
 
 
 viewColumns : List Column -> Html Msg
 viewColumns =
-    Html.div [ Attrs.class "Columns" ] << List.map viewColumn
+    Html.div [ Attrs.class "Columns" ] << List.indexedMap viewColumn
 
 
 init : Model
 init =
-    { columns = [ Column "Todo" (initColumn "todo"), Column "Done" (initColumn "done") ]
+    { columns = [ Column 0 "Todo" (initCards "todo") "", Column 1 "Done" (initCards "done") "" ]
     }
 
 
-initColumn : String -> List Card
-initColumn prefix =
+initCards : String -> List Card
+initCards prefix =
     let
         card : Int -> Card
         card i =
