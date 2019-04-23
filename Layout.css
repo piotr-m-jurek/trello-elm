@@ -13,6 +13,8 @@
 }
 
 .Column {
+    display: flex;
+    flex-direction: column;
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
     border-radius: 6px;
     padding: 8px;
@@ -26,22 +28,30 @@
     margin-top: 8px;
 }
 
-.Column__Input {
-    border: none;
+.Column__Form > * + * {
+    margin-left: 4px;
+}
+
+.Column__Form input {
     outline: none;
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+    border: none;
     border-radius: 6px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
     padding: 8px;
 }
-.Column__Input:focus {
+.Column__Form input:focus {
     box-shadow: 0 2px 3px rgba(255, 115, 0, 0.801), 0 0 0 1px rgba(255, 115, 0, 0.801);
 }
 
-.Column_Submit {
+.Column__Form button {
     border: none;
+    border-radius: 6px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     outline: none;
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
-    border-radius: 6px;
     padding: 8px;
 }
 

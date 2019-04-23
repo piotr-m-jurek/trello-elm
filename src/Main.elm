@@ -30,6 +30,7 @@ type alias Card =
 type Msg
     = OnFieldChange Int String
     | AddCard Int
+    | EnterSubmit Int Int
 
 
 update : Msg -> Model -> Model
@@ -52,12 +53,19 @@ update msg model =
                 addCard : Column -> Column
                 addCard column =
                     if column.id == idx then
-                        { column | cards = Card column.field :: column.cards }
+                        { column | cards = Card column.field :: column.cards, field = "" }
 
                     else
                         column
             in
             { model | columns = List.map addCard model.columns }
+
+        EnterSubmit i code ->
+            if code == 13 then
+                update (AddCard i) model
+
+            else
+                model
 
 
 view : Model -> Html Msg
@@ -70,7 +78,7 @@ view model =
 viewCard : Card -> Html Msg
 viewCard card =
     Html.div [ Attrs.class "Card" ]
-        [ Html.h4 [ Attrs.class "Card__Title" ] [ Html.text card.title ]
+        [ Html.p [ Attrs.class "Card__Title" ] [ Html.text card.title ]
         ]
 
 
@@ -78,15 +86,26 @@ viewColumn : Int -> Column -> Html Msg
 viewColumn idx col =
     Html.div [ Attrs.class "Column" ]
         [ Html.h2 [ Attrs.class "Column__Title" ] [ text col.title ]
-        , Html.div [ Attrs.class "Column__Cards" ] <| List.map viewCard col.cards
-        , Html.input
-            [ Attrs.class "Column__Input"
+        , if List.isEmpty col.cards then
+            Html.text ""
+
+          else
+            Html.div [ Attrs.class "Column__Cards" ] <| List.reverse <| List.map viewCard col.cards
+        , viewAddField idx col
+        ]
+
+
+viewAddField : Int -> Column -> Html Msg
+viewAddField idx col =
+    div [ Attrs.class "Column__Form" ]
+        [ Html.input
+            [ Attrs.value col.field
             , Ev.onInput (OnFieldChange idx)
+            , Ev.on "keydown" (JD.map (EnterSubmit idx) Ev.keyCode)
             ]
             []
         , Html.button
-            [ Attrs.class "Column_Submit"
-            , Attrs.disabled <| String.isEmpty <| col.field
+            [ Attrs.disabled <| String.isEmpty <| col.field
             , Ev.onClick <| AddCard idx
             ]
             [ Html.text "Add Card" ]
@@ -100,18 +119,13 @@ viewColumns =
 
 init : Model
 init =
-    { columns = [ Column 0 "Todo" (initCards "todo") "", Column 1 "Done" (initCards "done") "" ]
+    { columns = [ Column 0 "Todo" (List.range 0 2 |> List.map (initCard "todo")) "", Column 1 "Done" [] "" ]
     }
 
 
-initCards : String -> List Card
-initCards prefix =
-    let
-        card : Int -> Card
-        card i =
-            Card (prefix ++ String.fromInt i)
-    in
-    List.map card <| List.range 1 3
+initCard : String -> Int -> Card
+initCard prefix suffix =
+    Card (prefix ++ String.fromInt suffix)
 
 
 main : Program () Model Msg
