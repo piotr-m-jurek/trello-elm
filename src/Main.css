@@ -60,4 +60,21 @@
     border-radius: 6px;
     padding: 4px 8px;
     background: white;
+    display: flex;
+    justify-content: space-between;
+}
+
+.Card__Title {
+    padding: 4px 0;
+    margin: 0;
+}
+
+.Card__Remove {
+    border: none;
+    border-radius: 6px;
+    outline: none;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+}
+.Card__Remove:active {
+    box-shadow: inset 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
 }

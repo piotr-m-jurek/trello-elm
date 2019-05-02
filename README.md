@@ -6,3 +6,7 @@
 - [ ] Delete Card
 - [ ] Move Card to another pane
 - [ ] Edit card
+
+tutorial about native drag and drop with sorting
+https://www.html5rocks.com/en/tutorials/dnd/basics/
+https://codepen.io/askfinney/pen/qKXgap
