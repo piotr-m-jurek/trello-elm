@@ -6,6 +6,7 @@ import Html exposing (..)
 import Html.Attributes as Attrs
 import Html.Events as Ev
 import Json.Decode as JD
+import Monitor
 
 
 type alias Model =
@@ -148,7 +149,7 @@ initCard prefix idx suffix =
 
 main : Program () Model Msg
 main =
-    Browser.sandbox
+    Monitor.sandbox
         { init = init
         , view = view
         , update = update
