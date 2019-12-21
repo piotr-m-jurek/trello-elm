@@ -1,8 +1,8 @@
-import { Elm } from './src/Main.elm'
-import monitor from 'elm-monitor'
+const App = require('./src/Main.elm')
+const monitor = require('elm-monitor')
 monitor()
 
-Elm.Main.init({
+App.Elm.Main.init({
     node: document.getElementById('elm')
 })
 
